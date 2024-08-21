@@ -1,17 +1,17 @@
 import { cn } from "@/lib/utils";
 import { forwardRef } from "react";
-import { Pressable, PressableProps } from "react-native";
+import { Pressable, PressableProps, Text } from "react-native";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const buttonVariants = cva(
-  "w-full rounded-full flex flex-row justify-center items-center",
+  "w-full rounded-full flex flex-row justify-center items-center border-none",
   {
     variants: {
       variant: {
         default: "bg-primary-500 web:hover:opacity-90 active:opacity-90",
         destructive: "bg-danger-500 web:hover:opacity-90 active:opacity-90",
         outline:
-          "border border-input bg-background web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent",
+          "border border-neutral-200 bg-background web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent",
         secondary: "bg-secondary web:hover:opacity-80 active:opacity-80",
         ghost:
           "web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent",
@@ -33,20 +33,30 @@ const buttonVariants = cva(
 
 type ButtonProps = {
   className?: string;
+  title?: string;
+  titleStyle?: string;
   variant?: "default" | "outline" | "ghost" | "link";
   size?: "default" | "sm" | "lg";
   onPress: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const Button = forwardRef<PressableProps, ButtonProps>(
-  ({ className, variant, size, ...props }, ref) => {
+  (
+    { className, variant, size, title, titleStyle, children, ...props },
+    ref,
+  ) => {
     return (
       <Pressable
         className={cn(buttonVariants({ variant, size, className }))}
         style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }]}
         {...props}
-      />
+      >
+        {title && (
+          <Text className={cn("font-bold  text-lg", titleStyle)}>{title}</Text>
+        )}
+        {children}
+      </Pressable>
     );
   },
 );

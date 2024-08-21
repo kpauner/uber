@@ -4,6 +4,7 @@ import { icons, images } from "@/constants";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "expo-router";
+import OAuth from "@/components/o-auth";
 
 export default function SignUp() {
   const [form, setForm] = useState({
@@ -53,9 +54,8 @@ export default function SignUp() {
           value={form.name}
           onChangeText={(value) => handleChange("password", value)}
         />
-        <Button onPress={onSignUpPress} className="mt-6">
-          <Text className="font-bold text-white text-lg">Sign Up</Text>
-        </Button>
+        <Button onPress={onSignUpPress} className="mt-6" title="Sign Up" />
+        <OAuth />
         <Link href="/sign-in" className="mt-5">
           <Text className="text-primary-500 text-center ">
             Already have an account?
