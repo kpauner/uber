@@ -2,7 +2,10 @@ import GoogleTextInput from "@/components/google-text-input";
 import Map from "@/components/map";
 import RideCard from "@/components/ride-card";
 import { icons, images } from "@/constants";
+import { useLocationStore } from "@/store";
 import { useUser } from "@clerk/clerk-expo";
+import { useEffect, useState } from "react";
+import * as Location from "expo-location";
 import {
   ActivityIndicator,
   FlatList,
@@ -121,12 +124,38 @@ const recentRides = [
 ];
 
 export default function Home() {
+  const { setUserLocation, setDestinationLocation } = useLocationStore();
   const { user } = useUser();
+
+  const [hasPermission, setHasPermission] = useState(false);
   const loading = false;
   console.log(user);
   const handleDestinationPress = () => {
     console.log("destination pressed");
   };
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Location permission not granted");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync();
+      const address = await Location.reverseGeocodeAsync({
+        latitude: location.coords?.latitude!,
+        longitude: location.coords?.longitude!,
+      });
+
+      setUserLocation({
+        latitude: location.coords?.latitude,
+        longitude: location.coords?.longitude,
+        address: `${address[0].name}, ${address[0].region}`,
+      });
+    };
+    requestLocationPermission();
+  }, []);
+
   return (
     <SafeAreaView>
       <FlatList
