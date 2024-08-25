@@ -67,13 +67,32 @@ export default function layout() {
         }}
       />
       <Tabs.Screen
+        name="rides"
+        options={{
+          title: "Rides",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon source={icons.list} focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="chats"
         options={{
-          title: "chats",
+          title: "Chat",
           headerShown: false,
-          tabBarLabel: "Chats",
           tabBarIcon: ({ focused }) => (
-            <TabIcon source={icons.home} focused={focused} />
+            <TabIcon source={icons.chat} focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon source={icons.profile} focused={focused} />
           ),
         }}
       />

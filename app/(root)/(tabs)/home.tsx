@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Href, useRouter } from "expo-router";
 
 const recentRides = [
   {
@@ -125,36 +126,45 @@ const recentRides = [
 
 export default function Home() {
   const { setUserLocation, setDestinationLocation } = useLocationStore();
-  const { user } = useUser();
-
   const [hasPermission, setHasPermission] = useState(false);
+  const { user } = useUser();
+  const router = useRouter();
+
   const loading = false;
-  console.log(user);
-  const handleDestinationPress = () => {
-    console.log("destination pressed");
+
+  const handleDestinationPress = (location: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }) => {
+    setDestinationLocation(location);
+
+    router.push("/(root)/find-ride" as Href);
   };
 
   useEffect(() => {
     const requestLocationPermission = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.log("Location permission not granted");
+        setHasPermission(false);
         return;
       }
-      let location = await Location.getCurrentPositionAsync();
+      let location = await Location.getCurrentPositionAsync({});
       const address = await Location.reverseGeocodeAsync({
         latitude: location.coords?.latitude!,
         longitude: location.coords?.longitude!,
       });
 
       setUserLocation({
-        latitude: location.coords?.latitude,
-        longitude: location.coords?.longitude,
+        // latitude: location.coords?.latitude,
+        // longitude: location.coords?.longitude,
+        latitude: 37.78825,
+        longitude: -122.4324,
         address: `${address[0].name}, ${address[0].region}`,
       });
     };
     requestLocationPermission();
-  }, []);
+  }, [setUserLocation]);
 
   return (
     <SafeAreaView>

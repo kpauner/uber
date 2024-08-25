@@ -53,6 +53,7 @@ const drivers = [
 ];
 
 export default function Map() {
+  const { selectedDriver, setDrivers } = useDriverStore(drivers);
   const [markers, setMarkers] = useState<MarkerData[]>([]);
   const {
     userLongitude,
@@ -71,6 +72,7 @@ export default function Map() {
   });
 
   useEffect(() => {
+    setDrivers(drivers);
     if (Array.isArray(drivers)) {
       if (!userLatitude || !userLongitude) return;
 
@@ -82,7 +84,7 @@ export default function Map() {
 
       setMarkers(newMarkers);
     }
-  }, [drivers, userLatitude, userLongitude]);
+  }, [drivers, userLatitude, userLongitude, setDrivers]);
 
   return (
     <MapView
