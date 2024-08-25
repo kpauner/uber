@@ -139,7 +139,7 @@ export default function Home() {
   }) => {
     setDestinationLocation(location);
 
-    router.push("/(root)/find-ride" as Href);
+    router.push("/(root)/find-ride");
   };
 
   useEffect(() => {
